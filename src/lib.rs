@@ -1,4 +1,5 @@
 pub mod coordinate;
+pub mod parsing;
 pub mod range;
 // Force template to compile
 mod template;
