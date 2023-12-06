@@ -22,7 +22,7 @@ impl From<(u64, u64)> for Range<u64> {
     }
 }
 
-impl <T: PrimInt> Range<T> {
+impl<T: PrimInt> Range<T> {
     pub fn is_subrange_inclusive(&self, other: &Range<T>) -> bool {
         self.lower >= other.lower && self.upper <= other.upper
     }
@@ -38,7 +38,9 @@ impl <T: PrimInt> Range<T> {
     }
 
     pub fn overlap_or_adjacent(&self, other: &Range<T>) -> bool {
-        self.overlap(other) || self.upper == other.lower - T::one() || other.upper == self.lower - T::one()
+        self.overlap(other)
+            || self.upper == other.lower - T::one()
+            || other.upper == self.lower - T::one()
     }
 
     // assume overlap
