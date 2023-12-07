@@ -42,6 +42,7 @@ mod parsing {
         map_opt(take(2usize), |x: &str| x.trim().parse::<u32>().ok())(input)
     }
 
+    // This parse_numbers is slightly different because of the number formatting for day 4
     fn parse_numbers(input: &str) -> IResult<&str, Vec<u32>> {
         separated_list1(tag(" "), parse_number)(input)
     }

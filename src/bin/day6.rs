@@ -36,21 +36,16 @@ mod parsing {
     use crate::Race;
 
     use super::Input;
-    use advent_of_code2023::parsing::parse_i64;
+    use advent_of_code2023::parsing::parse_numbers;
     use color_eyre::Result;
     use itertools::Itertools;
     use nom::bytes::complete::take_till;
-    use nom::character::complete::space1;
     use nom::error::Error;
-    use nom::multi::separated_list1;
     use nom::sequence::{pair, preceded};
     use nom::{combinator::map, Finish, IResult};
 
     fn parse_line(input: &str) -> IResult<&str, Vec<i64>> {
-        preceded(
-            take_till(|c: char| c.is_ascii_digit()),
-            separated_list1(space1, parse_i64),
-        )(input)
+        preceded(take_till(|c: char| c.is_ascii_digit()), parse_numbers)(input)
     }
 
     pub fn parse_input(input: &str) -> Result<Input, Error<&str>> {

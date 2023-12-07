@@ -40,7 +40,7 @@ mod parsing {
     use crate::Element;
 
     use super::Input;
-    use advent_of_code2023::parsing::parse_u32;
+    use advent_of_code2023::parsing::parse_number;
     use color_eyre::Result;
     use itertools::Itertools;
     use nom::branch::alt;
@@ -59,7 +59,7 @@ mod parsing {
     }
 
     fn parse_part(input: &str) -> IResult<&str, Vec<Element>> {
-        map(parse_u32, |x| {
+        map(parse_number, |x: u32| {
             range(0, x.to_string().len())
                 .map(|i| {
                     if i == 0 {

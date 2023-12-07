@@ -42,10 +42,10 @@ mod parsing {
     use crate::Balls;
 
     use super::Input;
+    use advent_of_code2023::parsing::parse_number;
     use color_eyre::Result;
     use nom::branch::alt;
 
-    use nom::character::complete::digit1;
     use nom::error::Error;
     use nom::multi::separated_list1;
     use nom::sequence::{preceded, separated_pair};
@@ -56,10 +56,6 @@ mod parsing {
         Red(u32),
         Green(u32),
         Blue(u32),
-    }
-
-    fn parse_number(input: &str) -> IResult<&str, u32> {
-        map(digit1, |x: &str| x.parse::<u32>().unwrap())(input)
     }
 
     fn parse_cube(input: &str) -> IResult<&str, Ball> {

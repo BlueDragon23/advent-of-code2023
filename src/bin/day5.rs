@@ -49,7 +49,7 @@ mod parsing {
     use crate::MappingRow;
 
     use super::Input;
-    use advent_of_code2023::parsing::parse_u64;
+    use advent_of_code2023::parsing::{parse_number, parse_numbers};
     use color_eyre::Result;
     use nom::bytes::complete::take_till;
     use nom::error::Error;
@@ -58,15 +58,15 @@ mod parsing {
     use nom::{bytes::complete::tag, combinator::map, Finish, IResult};
 
     fn parse_seeds(input: &str) -> IResult<&str, Vec<u64>> {
-        preceded(tag("seeds: "), separated_list1(tag(" "), parse_u64))(input)
+        preceded(tag("seeds: "), parse_numbers)(input)
     }
 
     fn parse_mapping_row(input: &str) -> IResult<&str, MappingRow> {
         map(
             tuple((
-                terminated(parse_u64, tag(" ")),
-                terminated(parse_u64, tag(" ")),
-                parse_u64,
+                terminated(parse_number, tag(" ")),
+                terminated(parse_number, tag(" ")),
+                parse_number,
             )),
             |(destination, source, length)| MappingRow {
                 destination_start: destination,
@@ -98,7 +98,7 @@ mod parsing {
     }
 }
 
-fn get_location_for_seed(seed: u64, mappings: &Vec<Vec<MappingRow>>) -> u64 {
+fn get_location_for_seed(seed: u64, mappings: &[Vec<MappingRow>]) -> u64 {
     mappings.iter().fold(seed, |item, mapping| {
         mapping
             .iter()
@@ -124,7 +124,6 @@ fn solve_part2(input: &Input) -> u64 {
         .tuples()
         .flat_map(|(seed_start, seed_length)| {
             num::range(*seed_start, *seed_start + *seed_length - 1)
-                .into_iter()
                 .map(|seed| get_location_for_seed(seed, &input.mappings))
         })
         .min()
