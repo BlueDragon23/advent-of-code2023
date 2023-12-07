@@ -265,25 +265,11 @@ fn get_hand_type_part_2(cards: &[Card]) -> HandType {
     if joker_count == 0 {
         return base_hand_type;
     }
-    // println!("{:?}", base_hand_type);
     match base_hand_type {
         // Can't beat that
         HandType::Five => HandType::Five,
-        HandType::Four => {
-            if joker_count == 1 || joker_count == 4 {
-                HandType::Five
-            } else {
-                HandType::Four
-            }
-        }
-        HandType::FullHouse => {
-            // Must be 2, 3, or 0
-            if joker_count == 2 || joker_count == 3 {
-                HandType::Five
-            } else {
-                HandType::FullHouse
-            }
-        }
+        HandType::Four => HandType::Five,
+        HandType::FullHouse => HandType::Five,
         HandType::Three => match joker_count {
             1 => HandType::Four,
             2 => HandType::Five,
@@ -298,18 +284,8 @@ fn get_hand_type_part_2(cards: &[Card]) -> HandType {
                 HandType::Four
             }
         }
-        HandType::Pair => {
-            // Lots of options
-            match joker_count {
-                // If there's two, they are the pair
-                1 | 2 => HandType::Three,
-                _ => panic!("Invalid"),
-            }
-        }
-        HandType::HighCard => match joker_count {
-            1 => HandType::Pair,
-            _ => panic!("Invalid"),
-        },
+        HandType::Pair => HandType::Three,
+        HandType::HighCard => HandType::Pair,
     }
 }
 
