@@ -26,8 +26,13 @@ impl<T: PrimInt> Range<T> {
     pub fn is_subrange_inclusive(&self, other: &Range<T>) -> bool {
         self.lower >= other.lower && self.upper <= other.upper
     }
+
     pub fn is_subrange_exclusive(&self, other: &Range<T>) -> bool {
         self.lower > other.lower && self.upper < other.upper
+    }
+
+    pub fn contains(&self, point: T) -> bool {
+        self.lower <= point && point <= self.upper
     }
 
     pub fn overlap(&self, other: &Range<T>) -> bool {

@@ -158,14 +158,46 @@ impl From<&MappingRow> for MappingRange {
     }
 }
 
-fn build_mapping_ranges(
-    mapping_ranges: &Vec<MappingRange>,
-    mappings: &Vec<MappingRow>,
-) -> Vec<MappingRange> {
+// Given first is smaller than second, find the destination section that lines up
+fn get_destination_subrange(first: &MappingRange, second: &MappingRange) -> Range<u64> {
+    let lower_diff = first.destination.lower - second.source.lower;
+    let upper_diff = first.destination.upper - second.source.upper;
+    Range {
+        lower: second.destination.lower + lower_diff,
+        upper: second.destination.upper + upper_diff,
+    }
+}
+
+fn get_overlapping_ranges(start: &MappingRange, possible: &Vec<MappingRange>) -> Vec<MappingRange> {
+    possible
+        .iter()
+        .filter(|range| range.source.overlap(&start.destination))
+        .map(|x| *x)
+        .collect_vec()
+}
+
+fn build_mapping_ranges(acc: &Vec<MappingRange>, next: &Vec<MappingRange>) -> Vec<MappingRange> {
     // Combine a series of ranges with another set of mappings
     // Effectively composing the operations
-    // Collapse the destination of ranges into the destination of ranges + mappings
-    vec![]
+    // Collapse the destination of acc into the destination of acc + next
+    acc.iter()
+        .flat_map(|range| {
+            // If next is sorted, I could use dual iterators, but I'm lazy
+            if let Some(best_match) = next
+                .iter()
+                .find(|r| range.destination.is_subrange_inclusive(&r.source))
+            {
+                // There is a single mappingrange that contains the destination
+                return vec![MappingRange {
+                    source: range.source,
+                    destination: get_destination_subrange(range, best_match),
+                }];
+            }
+            // Need to split
+            let overlapping = get_overlapping_ranges(range, next);
+            vec![*range]
+        })
+        .collect_vec()
 }
 
 // Alternate concept: calculate every mapping in terms of ranges.
