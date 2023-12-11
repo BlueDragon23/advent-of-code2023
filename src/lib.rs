@@ -78,6 +78,19 @@ pub fn parse_lines_to_nums(lines: Lines<BufReader<File>>) -> Vec<i32> {
 //         .collect_vec()
 // }
 
+pub fn transpose<T: Copy>(matrix: &[Vec<T>]) -> Vec<Vec<T>> {
+    matrix
+        .iter()
+        .flat_map(|row| row.iter().enumerate())
+        .fold(Vec::new(), |mut acc, (col, x)| {
+            if acc.len() <= col {
+                acc.push(Vec::new());
+            }
+            acc[col].push(*x);
+            acc
+        })
+}
+
 pub fn print_matrix<T: Display>(matrix: &[Vec<T>]) {
     for line in matrix {
         println!("{}", line.iter().join(""));

@@ -1,5 +1,5 @@
 use itertools::Itertools;
-use num::{range_inclusive, PrimInt};
+use num::{abs, range_inclusive, PrimInt};
 use std::cmp::{max, min};
 use std::ops::{Add, Sub};
 
@@ -22,6 +22,12 @@ impl IndexingCoordinate {
 impl<T: PrimInt> From<(T, T)> for Coordinate<T> {
     fn from((row, col): (T, T)) -> Self {
         Coordinate { row, col }
+    }
+}
+
+impl Coordinate<i32> {
+    pub fn manhattan_distance(&self, other: &Coordinate<i32>) -> i32 {
+        abs(other.col - self.col) + abs(other.row - self.row)
     }
 }
 
