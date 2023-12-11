@@ -1,7 +1,7 @@
 use itertools::Itertools;
 use num::{range_inclusive, PrimInt};
 use std::cmp::{max, min};
-use std::ops::Add;
+use std::ops::{Add, Sub};
 
 #[derive(Clone, Copy, Debug, Default, Hash, PartialEq, Eq)]
 pub struct Coordinate<T: PrimInt> {
@@ -126,6 +126,17 @@ impl<T: PrimInt> Add for Coordinate<T> {
         Coordinate {
             row: self.row + rhs.row,
             col: self.col + rhs.col,
+        }
+    }
+}
+
+impl<T: PrimInt> Sub for Coordinate<T> {
+    type Output = Coordinate<T>;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        Coordinate {
+            row: self.row - rhs.row,
+            col: self.col - rhs.col,
         }
     }
 }
